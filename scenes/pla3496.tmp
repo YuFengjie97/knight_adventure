@@ -1,11 +1,8 @@
-[gd_scene load_steps=43 format=3 uid="uid://bdrvukpvfaowr"]
+[gd_scene load_steps=40 format=3 uid="uid://bdrvukpvfaowr"]
 
 [ext_resource type="Texture2D" uid="uid://codynuxf3rvqg" path="res://sprites/knight.png" id="1_47rbs"]
 [ext_resource type="Script" path="res://scenes/Idle.gd" id="3_1a61j"]
-[ext_resource type="Script" path="res://scenes/state_machine.gd" id="3_nowv8"]
-[ext_resource type="Script" path="res://scenes/Run.gd" id="4_xbevm"]
-[ext_resource type="Script" path="res://scenes/Jump.gd" id="5_lealb"]
-[ext_resource type="Script" path="res://scenes/Roll.gd" id="6_am870"]
+[ext_resource type="Script" path="res://scenes/state_mechine.gd" id="3_rc7d5"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eoy0r"]
 atlas = ExtResource("1_47rbs")
@@ -306,18 +303,9 @@ position = Vector2(0, 7)
 target_position = Vector2(-7, 0)
 collision_mask = 2
 
-[node name="StateMachine" type="Node" parent="."]
-script = ExtResource("3_nowv8")
+[node name="StateMechine" type="Node" parent="."]
+script = ExtResource("3_rc7d5")
 initial_state = NodePath("Idle")
 
-[node name="Idle" type="Node" parent="StateMachine"]
+[node name="Idle" type="Node" parent="StateMechine"]
 script = ExtResource("3_1a61j")
-
-[node name="Run" type="Node" parent="StateMachine"]
-script = ExtResource("4_xbevm")
-
-[node name="Jump" type="Node" parent="StateMachine"]
-script = ExtResource("5_lealb")
-
-[node name="Roll" type="Node" parent="StateMachine"]
-script = ExtResource("6_am870")

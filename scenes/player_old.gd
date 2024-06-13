@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+enum State { STANDING, RUNNING, JUMPING, ROLLING }
+enum Command { STAND, RUN, JUMP, ROLL }
 
 const SPEED = 10000.0
 const SPEED_ROLL = SPEED * 2.
@@ -7,17 +9,12 @@ const JUMP_VELOCITY = -300.0
 const ROLL_DISTANCE_MAX = 5000
 
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+var roll_distance = 0
+var state = State.STANDING
 
 @onready var animate_sprite = $AnimatedSprite2D
 @onready var ray_cast_left = $RayCastLeft
 @onready var ray_cast_right = $RayCastRight
-var roll_distance = 0
-
-# 当前状态state standing running jumping rolling
-enum State { STANDING, RUNNING, JUMPING, ROLLING }
-var state = State.STANDING
-enum Command { STAND, RUN, JUMP, ROLL }
-
 
 func enum_key(e, index):
 	var keys = e.keys()
@@ -25,27 +22,32 @@ func enum_key(e, index):
 		if e[k] == index:
 			return k
 
+
 func handle_standing():
 	state = State.STANDING
 	animate_sprite.play('idle')
 	velocity.x = 0
 	velocity.y = 0
 	roll_distance = 0
-	
+
+
 func handle_running():
 	state = State.RUNNING
 	animate_sprite.play('run')
-	
+
+
 func handle_jumping():
 	state = State.JUMPING
 	animate_sprite.play('jump')
 	velocity.y = JUMP_VELOCITY
 	roll_distance = 0
 
+
 func handle_rolling():
 	state = State.ROLLING
 	animate_sprite.play('roll')
-# input: stand run jump roll
+
+
 func handle_state(command):
 	print(enum_key(State, state),'-->',enum_key(Command, command))
 	match state:
@@ -72,7 +74,7 @@ func handle_state(command):
 				handle_standing.call()
 			
 	print('----',enum_key(State, state))
-	
+
 
 func _physics_process(delta):
 	var direction = Input.get_axis('move_left','move_right')
@@ -90,6 +92,11 @@ func _physics_process(delta):
 	if state == State.STANDING && Input.is_action_just_pressed('roll'):
 		print('#standing -> rolling')
 		handle_state(Command.ROLL)
+	
+	# standing -> jumping running -> jumping
+	if Input.is_action_just_pressed('jump') && (state == State.STANDING || state == State.RUNNING):
+		print('# standing -> jumping running -> jumping')
+		handle_state(Command.JUMP)
 	
 	# rolling -> standing
 	if state == State.ROLLING:
@@ -117,10 +124,7 @@ func _physics_process(delta):
 		print('# running -> jumping')
 		handle_state(Command.JUMP)
 
-	# standing -> jumping running -> jumping
-	if Input.is_action_just_pressed('jump') && (state == State.STANDING || state == State.RUNNING):
-		print('# standing -> jumping running -> jumping')
-		handle_state(Command.JUMP)
+
 		
 	# jumping -> standing
 	if is_on_floor() && state == State.JUMPING && velocity.y == 0:
