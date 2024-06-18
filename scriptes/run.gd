@@ -1,14 +1,17 @@
 extends State
 
 
-func update(delta):
+func enter():
+	super.enter()
+
+func update(_delta):
 	animate_sprite.play('run')
 
 
-func physics_update(delta):
-	super.physics_update(delta)
+func physics_update(_delta):
+	super.physics_update(_delta)
 	
-	player.velocity.x = SPEED * direction * delta
+	player.velocity.x = SPEED * direction * _delta
 	
 	if player.is_on_floor() && !direction:
 		state_machine.transition_to('Idle')

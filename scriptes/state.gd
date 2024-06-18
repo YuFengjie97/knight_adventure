@@ -6,7 +6,6 @@ const SPEED_ROLL = SPEED * 2.
 const JUMP_VELOCITY = -300.0
 const ROLL_DISTANCE_MAX = 5000
 
-var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var state_machine: StateMachine
 var roll_distance = 0
 static var face_direction = 1 # 1-right -1-left
@@ -29,11 +28,11 @@ func handle_input(_event: InputEvent) -> void:
 	pass
 
 
-func update(delta: float) -> void:
+func update(_delta: float) -> void:
 	pass
 
 
-func physics_update(delta: float) -> void:
+func physics_update(_delta: float) -> void:
 	direction = Input.get_axis('move_left', 'move_right')
 	if direction == 1:
 		face_direction = 1
@@ -43,13 +42,15 @@ func physics_update(delta: float) -> void:
 		animate_sprite.flip_h = true
 	#face_direction = -1 if animate_sprite.flip_h else 1
 
-	player.velocity.y += gravity * delta
-	player.move_and_slide()
+	
 	
 	
 
 func enter() -> void:
-	print('state enter ', name, ' ', direction, ' ', face_direction)
+	pass
+	#state_machine.state_str = name
+	#print('enter state--', state_machine.state_str)
+	#print('state enter ', name, ' ', direction, ' ', face_direction)
 
 
 func exit() -> void:

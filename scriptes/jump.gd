@@ -6,13 +6,13 @@ func enter():
 	player.velocity.y = JUMP_VELOCITY
 
 
-func update(delta):
+func update(_delta):
 	animate_sprite.play('jump')
 
 
-func physics_update(delta):
-	super.physics_update(delta)
-	player.velocity.x = SPEED * direction * delta
+func physics_update(_delta):
+	super.physics_update(_delta)
+	player.velocity.x = SPEED * direction * _delta
 	
 	# jumping -> standing
 	if player.is_on_floor() && player.velocity.y == 0:

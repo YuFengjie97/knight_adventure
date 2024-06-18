@@ -1,11 +1,12 @@
-[gd_scene load_steps=43 format=3 uid="uid://bdrvukpvfaowr"]
+[gd_scene load_steps=44 format=3 uid="uid://bdrvukpvfaowr"]
 
 [ext_resource type="Texture2D" uid="uid://codynuxf3rvqg" path="res://sprites/knight.png" id="1_47rbs"]
-[ext_resource type="Script" path="res://scenes/Idle.gd" id="3_1a61j"]
-[ext_resource type="Script" path="res://scenes/state_machine.gd" id="3_nowv8"]
-[ext_resource type="Script" path="res://scenes/Run.gd" id="4_xbevm"]
-[ext_resource type="Script" path="res://scenes/Jump.gd" id="5_lealb"]
-[ext_resource type="Script" path="res://scenes/Roll.gd" id="6_am870"]
+[ext_resource type="Script" path="res://scriptes/player.gd" id="1_d4bgw"]
+[ext_resource type="Script" path="res://scriptes/state_machine.gd" id="2_cf84e"]
+[ext_resource type="Script" path="res://scriptes/idle.gd" id="3_dlsdi"]
+[ext_resource type="Script" path="res://scriptes/run.gd" id="4_7vwxa"]
+[ext_resource type="Script" path="res://scriptes/jump.gd" id="5_0fc5k"]
+[ext_resource type="Script" path="res://scriptes/roll.gd" id="6_31v84"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eoy0r"]
 atlas = ExtResource("1_47rbs")
@@ -285,6 +286,7 @@ radius = 5.0
 z_index = 10
 collision_layer = 2
 collision_mask = 13
+script = ExtResource("1_d4bgw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_l7p22")
@@ -307,17 +309,22 @@ target_position = Vector2(-7, 0)
 collision_mask = 2
 
 [node name="StateMachine" type="Node" parent="."]
-script = ExtResource("3_nowv8")
+script = ExtResource("2_cf84e")
 initial_state = NodePath("Idle")
 
 [node name="Idle" type="Node" parent="StateMachine"]
-script = ExtResource("3_1a61j")
+script = ExtResource("3_dlsdi")
 
 [node name="Run" type="Node" parent="StateMachine"]
-script = ExtResource("4_xbevm")
+script = ExtResource("4_7vwxa")
 
 [node name="Jump" type="Node" parent="StateMachine"]
-script = ExtResource("5_lealb")
+script = ExtResource("5_0fc5k")
 
 [node name="Roll" type="Node" parent="StateMachine"]
-script = ExtResource("6_am870")
+script = ExtResource("6_31v84")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
+
+[connection signal="transitioned" from="StateMachine" to="." method="_on_state_machine_transitioned"]

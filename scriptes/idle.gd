@@ -1,15 +1,16 @@
 extends State
 
 
-#func enter():
+func enter():
+	super.enter()
 	#player.velocity.x = 0
 
-func update(delta):
+func update(_delta):
 	animate_sprite.play('idle')
 
 
-func physics_update(delta):
-	super.physics_update(delta)
+func physics_update(_delta):
+	super.physics_update(_delta)
 	player.velocity.x = 0 # 应该在enter中，但是idle作为默认状态，enter却找不到player节点
 
 	# standing -> running

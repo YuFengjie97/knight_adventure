@@ -1,0 +1,90 @@
+[gd_scene load_steps=12 format=3 uid="uid://tclpt1ub1fdf"]
+
+[ext_resource type="Texture2D" uid="uid://dg6ipi7umswi6" path="res://sprites/slime_green.png" id="1_l1c3k"]
+[ext_resource type="Script" path="res://scriptes/enemy.gd" id="1_ppnud"]
+[ext_resource type="PackedScene" uid="uid://b85i3ku3iripg" path="res://scenes/kill_zone.tscn" id="3_tm6cf"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c01j8"]
+atlas = ExtResource("1_l1c3k")
+region = Rect2(48, 48, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oh014"]
+atlas = ExtResource("1_l1c3k")
+region = Rect2(0, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5qkes"]
+atlas = ExtResource("1_l1c3k")
+region = Rect2(24, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_na6qf"]
+atlas = ExtResource("1_l1c3k")
+region = Rect2(48, 24, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ynucr"]
+atlas = ExtResource("1_l1c3k")
+region = Rect2(72, 24, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dt1gu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c01j8")
+}],
+"loop": true,
+"name": &"hit",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oh014")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5qkes")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_na6qf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ynucr")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 8.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qxq83"]
+radius = 3.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wr35f"]
+radius = 6.0
+
+[node name="Enemy" type="RigidBody2D" groups=["enemy"]]
+collision_layer = 4
+collision_mask = 3
+max_contacts_reported = 4
+contact_monitor = true
+script = ExtResource("1_ppnud")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_dt1gu")
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.524956
+
+[node name="KillZone" parent="." instance=ExtResource("3_tm6cf")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
+position = Vector2(0, 6)
+shape = SubResource("CircleShape2D_qxq83")
+debug_color = Color(0.829771, 0.12531, 0.898075, 0.42)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 6)
+shape = SubResource("CircleShape2D_wr35f")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
