@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://l88rrvieyo54"]
+[gd_scene load_steps=11 format=3 uid="uid://l88rrvieyo54"]
 
 [ext_resource type="PackedScene" uid="uid://bdrvukpvfaowr" path="res://scenes/player.tscn" id="1_cl0f3"]
 [ext_resource type="Script" path="res://scriptes/game.gd" id="1_m6v4t"]
@@ -6,8 +6,6 @@
 [ext_resource type="FontFile" uid="uid://b26pcxowvqm5h" path="res://fonts/PixelOperator8.ttf" id="3_3epr5"]
 [ext_resource type="PackedScene" uid="uid://tclpt1ub1fdf" path="res://scenes/enemy.tscn" id="4_s51n1"]
 [ext_resource type="PackedScene" uid="uid://b85i3ku3iripg" path="res://scenes/kill_zone.tscn" id="5_vcv2x"]
-[ext_resource type="Script" path="res://scriptes/camera_player.gd" id="7_qutkl"]
-[ext_resource type="PackedScene" uid="uid://bbq170o13cql7" path="res://scenes/ui_health.tscn" id="9_e064o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5vsfr"]
 texture = ExtResource("2_j0pmk")
@@ -433,7 +431,7 @@ sources/0 = SubResource("TileSetAtlasSource_5vsfr")
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_63l2e"]
 distance = -417.0
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node"]
 script = ExtResource("1_m6v4t")
 
 [node name="Player" parent="." instance=ExtResource("1_cl0f3")]
@@ -475,10 +473,3 @@ position = Vector2(100, 200)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
 position = Vector2(-229, -58)
 shape = SubResource("WorldBoundaryShape2D_63l2e")
-
-[node name="CameraPlayer" type="Camera2D" parent="."]
-zoom = Vector2(2, 2)
-script = ExtResource("7_qutkl")
-
-[node name="HealthUI" parent="CameraPlayer" instance=ExtResource("9_e064o")]
-position = Vector2(-153, -111)

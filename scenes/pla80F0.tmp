@@ -1,16 +1,12 @@
-[gd_scene load_steps=46 format=3 uid="uid://bdrvukpvfaowr"]
+[gd_scene load_steps=44 format=3 uid="uid://bdrvukpvfaowr"]
 
 [ext_resource type="Texture2D" uid="uid://codynuxf3rvqg" path="res://sprites/knight.png" id="1_47rbs"]
 [ext_resource type="Script" path="res://scriptes/player.gd" id="1_d4bgw"]
-[ext_resource type="Script" path="res://scriptes/player_state_idle.gd" id="3_dlsdi"]
-[ext_resource type="Script" path="res://scriptes/state_machine.gd" id="3_qc7sc"]
-[ext_resource type="Script" path="res://scriptes/player_state_jump.gd" id="5_0fc5k"]
-[ext_resource type="Script" path="res://scriptes/player_state_run.gd" id="5_m4akw"]
-[ext_resource type="Script" path="res://scriptes/player_state_roll.gd" id="6_31v84"]
-[ext_resource type="AudioStream" uid="uid://76tfgofh24rj" path="res://sounds/jump.wav" id="8_5p26c"]
-[ext_resource type="Script" path="res://scriptes/player_state_hit.gd" id="8_wn6j5"]
-[ext_resource type="Script" path="res://scriptes/player_state_death.gd" id="9_22q5f"]
-[ext_resource type="AudioStream" uid="uid://b7wsugyi8w6fj" path="res://sounds/hurt.wav" id="11_5j41m"]
+[ext_resource type="Script" path="res://scriptes/state_machine.gd" id="2_cf84e"]
+[ext_resource type="Script" path="res://scriptes/idle.gd" id="3_dlsdi"]
+[ext_resource type="Script" path="res://scriptes/run.gd" id="4_7vwxa"]
+[ext_resource type="Script" path="res://scriptes/jump.gd" id="5_0fc5k"]
+[ext_resource type="Script" path="res://scriptes/roll.gd" id="6_31v84"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eoy0r"]
 atlas = ExtResource("1_47rbs")
@@ -27,6 +23,14 @@ region = Rect2(64, 224, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_q6fdq"]
 atlas = ExtResource("1_47rbs")
 region = Rect2(96, 224, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m1ij4"]
+atlas = ExtResource("1_47rbs")
+region = Rect2(0, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eyknh"]
+atlas = ExtResource("1_47rbs")
+region = Rect2(32, 192, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ns7hj"]
 atlas = ExtResource("1_47rbs")
@@ -155,11 +159,17 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_q6fdq")
 }],
-"loop": false,
+"loop": true,
 "name": &"death",
 "speed": 4.0
 }, {
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m1ij4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eyknh")
+}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ns7hj")
 }, {
@@ -168,7 +178,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"hit",
-"speed": 2.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -191,7 +201,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_e284t")
 }],
-"loop": false,
+"loop": true,
 "name": &"jump",
 "speed": 5.0
 }, {
@@ -269,25 +279,26 @@ animations = [{
 "speed": 12.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_0rhtv"]
-size = Vector2(8, 10)
+[sub_resource type="CircleShape2D" id="CircleShape2D_e7b7b"]
+radius = 5.0
 
 [node name="Player" type="CharacterBody2D"]
 z_index = 10
-position = Vector2(0, -7)
 collision_layer = 2
+collision_mask = 13
 platform_floor_layers = 4294967281
 script = ExtResource("1_d4bgw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_l7p22")
-animation = &"death"
-frame = 3
-frame_progress = 1.0
+animation = &"roll"
+autoplay = "idle"
+frame = 4
+frame_progress = 0.0961268
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 7)
-shape = SubResource("RectangleShape2D_0rhtv")
+shape = SubResource("CircleShape2D_e7b7b")
 
 [node name="RayCastRight" type="RayCast2D" parent="."]
 position = Vector2(0, 7)
@@ -299,34 +310,22 @@ target_position = Vector2(-7, 0)
 collision_mask = 2
 
 [node name="StateMachine" type="Node" parent="."]
-script = ExtResource("3_qc7sc")
+script = ExtResource("2_cf84e")
 initial_state = NodePath("Idle")
 
 [node name="Idle" type="Node" parent="StateMachine"]
 script = ExtResource("3_dlsdi")
 
-[node name="Roll" type="Node" parent="StateMachine"]
-script = ExtResource("6_31v84")
+[node name="Run" type="Node" parent="StateMachine"]
+script = ExtResource("4_7vwxa")
 
 [node name="Jump" type="Node" parent="StateMachine"]
 script = ExtResource("5_0fc5k")
 
-[node name="SoundJump" type="AudioStreamPlayer2D" parent="StateMachine/Jump"]
-stream = ExtResource("8_5p26c")
+[node name="Roll" type="Node" parent="StateMachine"]
+script = ExtResource("6_31v84")
 
-[node name="Run" type="Node" parent="StateMachine"]
-script = ExtResource("5_m4akw")
-
-[node name="Hit" type="Node" parent="StateMachine"]
-script = ExtResource("8_wn6j5")
-
-[node name="SoundHit" type="AudioStreamPlayer2D" parent="StateMachine/Hit"]
-stream = ExtResource("11_5j41m")
-
-[node name="HitTimer" type="Timer" parent="StateMachine/Hit"]
-one_shot = true
-
-[node name="Death" type="Node" parent="StateMachine"]
-script = ExtResource("9_22q5f")
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
 
 [connection signal="transitioned" from="StateMachine" to="." method="_on_state_machine_transitioned"]

@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://q7gcb31pdaqm"]
+
+[ext_resource type="Script" path="res://scriptes/heart.gd" id="1_186s0"]
+[ext_resource type="Texture2D" uid="uid://x0wvrj8t35v0" path="res://sprites/heart.tres" id="1_qobci"]
+
+[node name="Heart" type="TextureRect"]
+custom_minimum_size = Vector2(10, 10)
+offset_right = 10.0
+texture = ExtResource("1_qobci")
+expand_mode = 1
+script = ExtResource("1_186s0")

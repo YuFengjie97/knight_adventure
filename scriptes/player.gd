@@ -1,20 +1,30 @@
 class_name Player
 extends CharacterBody2D
 
-
 var state = 'Idle'
-var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
+var collision_disable = false
+var health = 1: set = set_health
+var health_max = 1: set = set_health_max
 
 
-func die():
-	print('player die')
-	#get_tree().reload_current_scene()
-	
-func _physics_process(delta):
-	velocity.y += gravity * delta
-	move_and_slide()
+@onready var collision_shape = $CollisionShape2D
+
+
+func _ready():
+	await owner.ready
+	health_max = 4
+	health = 4
+
+
+func set_health(value):
+	health = clamp(value, 0, health_max)
+	SignalBus.update_health_ui.emit(health, health_max)
+
+
+func set_health_max(value):
+	health_max = clamp(value, 1, 10)
+	SignalBus.update_health_ui.emit(health, health_max)
 	
 
 func _on_state_machine_transitioned(state_name):
 	state = state_name
-	#print('player state--', state)

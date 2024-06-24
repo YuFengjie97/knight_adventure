@@ -8,8 +8,7 @@ var player: Player
 
 
 func _on_timer_timeout():
-	pass
-	#get_tree().reload_current_scene()
+	get_tree().reload_current_scene()
 
 
 

@@ -1,8 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://tclpt1ub1fdf"]
+[gd_scene load_steps=14 format=3 uid="uid://tclpt1ub1fdf"]
 
 [ext_resource type="Texture2D" uid="uid://dg6ipi7umswi6" path="res://sprites/slime_green.png" id="1_l1c3k"]
 [ext_resource type="Script" path="res://scriptes/enemy.gd" id="1_ppnud"]
-[ext_resource type="AudioStream" uid="uid://cfyxv1f4uk0rh" path="res://sounds/explosion.wav" id="3_0wv4x"]
+[ext_resource type="Script" path="res://scriptes/state_machine.gd" id="3_ftkx7"]
+[ext_resource type="Script" path="res://scriptes/enemy_state_move.gd" id="4_352pm"]
+[ext_resource type="Script" path="res://scriptes/enemy_state_hit_to_left.gd" id="5_gfpup"]
+[ext_resource type="Script" path="res://scriptes/enemy_state_hit_to_right.gd" id="6_indtg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c01j8"]
 atlas = ExtResource("1_l1c3k")
@@ -53,9 +56,9 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fndij"]
-size = Vector2(14, 12.5)
+size = Vector2(14, 13)
 
-[node name="Enemy" type="CharacterBody2D" groups=["enemy_group"]]
+[node name="Enemy" type="CharacterBody2D" groups=["enemy"]]
 collision_layer = 4
 collision_mask = 3
 script = ExtResource("1_ppnud")
@@ -66,29 +69,24 @@ animation = &"idle"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 5.75)
+position = Vector2(0, 5.5)
 shape = SubResource("RectangleShape2D_fndij")
 
-[node name="RayCastLeft" type="RayCast2D" parent="."]
-position = Vector2(0, 6)
-target_position = Vector2(-9, 0)
-collision_mask = 2
-
-[node name="RayCastRight" type="RayCast2D" parent="."]
-position = Vector2(0, 6)
-target_position = Vector2(9, 0)
-collision_mask = 2
-
-[node name="RayCastUp" type="RayCast2D" parent="."]
-position = Vector2(0, 6)
-target_position = Vector2(0, -8)
-collision_mask = 2
-
-[node name="DieTimer" type="Timer" parent="."]
-wait_time = 3.0
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
 one_shot = true
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("3_0wv4x")
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource("3_ftkx7")
+initial_state = NodePath("Move")
 
-[connection signal="timeout" from="DieTimer" to="." method="_on_die_timer_timeout"]
+[node name="Move" type="Node" parent="StateMachine"]
+script = ExtResource("4_352pm")
+
+[node name="HitToLeft" type="Node" parent="StateMachine"]
+script = ExtResource("5_gfpup")
+
+[node name="HitToRight" type="Node" parent="StateMachine"]
+script = ExtResource("6_indtg")
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
