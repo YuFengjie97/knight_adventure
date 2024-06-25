@@ -1,9 +1,9 @@
 extends PlayerState
 
-@onready var hit_timer: Timer = $HitTimer
 @onready var sound_hit: AudioStreamPlayer2D = $SoundHit
+@onready var timer = $Timer
 
-var is_hit = false # player 被攻击
+var hit_disable = false
 
 func _ready():
 	super._ready()
@@ -11,37 +11,16 @@ func _ready():
 
 
 func hit_by_enemy():
-	if not is_hit and player.health != 0:
-		is_hit = true
-		hit_timer.start()
-		sound_hit.play()
+	if not hit_disable:
 		player.health -= 1
-		await hit_timer.timeout
-		is_hit = false
+		hit_disable = true
+		timer.start()
+		var tween = get_tree().create_tween()
+		tween.tween_property(animate_sprite, 'modulate', Color.RED, 0.1)
+		tween.tween_property(animate_sprite, 'modulate', Color.WHITE, 0.1)
+		tween.tween_property(animate_sprite, 'modulate', Color.RED, 0.1)
+		tween.tween_property(animate_sprite, 'modulate', Color.WHITE, 0.1)
 
-func enter():
-	animate_sprite.play('hit')
 
-
-func update(_delta):
-	super.update(_delta)
-	player.velocity.x = SPEED * direction * _delta
-	if is_hit:
-		return
-	if player.health == 0:
-		state_machine.transition_to('Death')
-		return
-	if player.is_on_floor() and not direction:
-		state_machine.transition_to('Idle')
-		return
-	if player.is_on_floor() and direction:
-		state_machine.transition_to('Run')
-		return
-	if player.is_on_floor() and Input.is_action_just_pressed('roll'):
-		state_machine.transition_to('Roll')
-		return
-	if player.is_on_floor() and Input.is_action_just_pressed('jump'):
-		state_machine.transition_to('Jump')
-		return
-	
-	
+func _on_timer_timeout():
+	hit_disable = false

@@ -1,5 +1,7 @@
 extends Node
 
-signal update_health_ui(health_info)
+signal update_health_ui
 signal enemy_hit_player
-
+signal fruit_eat_by_player
+signal kill_zone_kill_player
+signal player_get_coin

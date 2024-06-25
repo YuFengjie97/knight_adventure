@@ -19,8 +19,8 @@ func update(_delta):
 	if player.velocity.y == 0:
 		state_machine.transition_to('Idle')
 		return
-	if state_hit.is_hit:
-		state_machine.transition_to('Hit')
+	if player.health == 0:
+		state_machine.transition_to('Death')
 		return
 
 

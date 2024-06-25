@@ -5,7 +5,7 @@ var health_max = 1
 var health = 1
 var heart_atals = "res://sprites/heart.tres"
 var heart_null_atals = "res://sprites/heart_null.tres"
-var Heart = preload("res://scenes/heart.tscn")
+var HeartScene = preload("res://scenes/heart.tscn")
 
 @onready var container = $HFlowContainer
 
@@ -14,11 +14,11 @@ func init():
 	for child in childs:
 		child.queue_free()
 	for i in range(health):
-		var heart = Heart.instantiate()
+		var heart = HeartScene.instantiate()
 		heart.update(true)
 		container.add_child(heart)
 	for i in range(health_max - health):
-		var heart = Heart.instantiate()
+		var heart = HeartScene.instantiate()
 		heart.update(false)
 		container.add_child(heart)
 

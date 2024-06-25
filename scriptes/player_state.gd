@@ -13,6 +13,7 @@ var player: CharacterBody2D
 var animate_sprite: AnimatedSprite2D
 var ray_cast_left: RayCast2D
 var ray_cast_right: RayCast2D
+var collision: CollisionShape2D
 
 func _ready():
 	await owner.ready
@@ -21,6 +22,7 @@ func _ready():
 	animate_sprite = owner.get_node('AnimatedSprite2D')
 	ray_cast_left = owner.get_node('RayCastLeft')
 	ray_cast_right = owner.get_node('RayCastRight')
+	collision = owner.get_node('CollisionShape2D')
 
 
 func update(_delta: float) -> void:

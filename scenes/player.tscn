@@ -281,9 +281,7 @@ script = ExtResource("1_d4bgw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_l7p22")
-animation = &"death"
-frame = 3
-frame_progress = 1.0
+animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 7)
@@ -323,10 +321,18 @@ script = ExtResource("8_wn6j5")
 [node name="SoundHit" type="AudioStreamPlayer2D" parent="StateMachine/Hit"]
 stream = ExtResource("11_5j41m")
 
-[node name="HitTimer" type="Timer" parent="StateMachine/Hit"]
+[node name="Timer" type="Timer" parent="StateMachine/Hit"]
 one_shot = true
 
 [node name="Death" type="Node" parent="StateMachine"]
 script = ExtResource("9_22q5f")
 
+[node name="Timer" type="Timer" parent="StateMachine/Death"]
+wait_time = 2.0
+one_shot = true
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="transitioned" from="StateMachine" to="." method="_on_state_machine_transitioned"]
+[connection signal="timeout" from="StateMachine/Hit/Timer" to="StateMachine/Hit" method="_on_timer_timeout"]

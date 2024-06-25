@@ -19,7 +19,7 @@ func update(_delta):
 	if Input.is_action_just_pressed('jump'):
 		state_machine.transition_to('Jump')
 		return
-	if state_hit.is_hit:
-		state_machine.transition_to('Hit')
+	if player.health == 0:
+		state_machine.transition_to('Death')
 		return
 	

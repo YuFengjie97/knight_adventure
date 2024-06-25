@@ -91,4 +91,12 @@ one_shot = true
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_0wv4x")
 
+[node name="RayCastFindWayRight" type="RayCast2D" parent="."]
+position = Vector2(0, 6)
+target_position = Vector2(15, 8)
+
+[node name="RayCastFindWayLeft" type="RayCast2D" parent="."]
+position = Vector2(0, 6)
+target_position = Vector2(-14, 8)
+
 [connection signal="timeout" from="DieTimer" to="." method="_on_die_timer_timeout"]
