@@ -109,7 +109,7 @@ theme_override_constants/margin_left = 18
 position = Vector2(9, 4)
 sprite_frames = SubResource("SpriteFrames_8no7p")
 autoplay = "default"
-frame_progress = 0.0104979
+frame_progress = 0.144704
 
 [node name="HFlowContainer" type="HFlowContainer" parent="HBoxContainer"]
 layout_mode = 2
